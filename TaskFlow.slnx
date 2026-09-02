@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="TaskFlow.Api/TaskFlow.Api.csproj" />
+  <Project Path="TaskFlow.Application/TaskFlow.Application.csproj" />
+  <Project Path="TaskFlow.Domain/TaskFlow.Domain.csproj" />
+  <Project Path="TaskFlow.Infra.Data/TaskFlow.Infra.Data.csproj" />
+  <Project Path="TaskFlow.Infra.IOC/TaskFlow.Infra.IOC.csproj" />
+</Solution>
