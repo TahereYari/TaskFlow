@@ -9,5 +9,7 @@ namespace TaskFlow.Domain.Models.Users
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
+        public UserProfile UserProfile { get; set; } = null!;
+        public bool IsActive { get; set; } = true;
     }
 }

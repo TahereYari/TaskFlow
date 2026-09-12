@@ -7,7 +7,7 @@ namespace TaskFlow.Domain.Models.Users
 {
     public class UserProfile : BaseEntity
     {
-        public string UserId { get; set; } = null!;
+        public Guid UserId { get; set; } 
 
         public required string Name { get; set; }
 
@@ -18,5 +18,8 @@ namespace TaskFlow.Domain.Models.Users
         public string? PhoneNumber { get; set; }
 
         public DateTime? BirthDate { get; set; }
+        public ApplicationUser User { get; set; } = null!;
+
+
     }
 }

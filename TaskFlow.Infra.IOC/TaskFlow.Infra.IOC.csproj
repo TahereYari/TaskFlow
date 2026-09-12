@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TaskFlow.Infra.Data\TaskFlow.Infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>

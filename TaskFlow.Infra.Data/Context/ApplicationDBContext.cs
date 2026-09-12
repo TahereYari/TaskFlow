@@ -18,6 +18,7 @@ namespace TaskFlow.Infra.Data.Context
 
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
 
