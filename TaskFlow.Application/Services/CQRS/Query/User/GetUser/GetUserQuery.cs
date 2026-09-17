@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TaskFlow.Application.Services.CQRS.Query.User
+namespace TaskFlow.Application.Services.CQRS.Query.User.GetUser
 {
     public class GetUserQuery
     {

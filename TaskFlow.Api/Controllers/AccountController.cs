@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using TaskFlow.Application.Services.Interfaces.Account;
-using TaskFlow.Application.Services.Interfaces.User;
 using TaskFlow.Domain.ErrorMessages;
 using TaskFlow.Domain.ViewModels.Accounts;
 using TaskFlow.Domain.ViewModels.RefreshToken;

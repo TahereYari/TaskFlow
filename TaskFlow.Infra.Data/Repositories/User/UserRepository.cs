@@ -49,105 +49,48 @@ namespace TaskFlow.Infra.Data.Repositories.User
         #endregion
 
 
-
         #region GetUsersAsync
-
-        public async Task<Result> GetUsersAsync(FilterUsersViewModel model)
+          public async Task<BasePaging<ApplicationUser>> GetUsersAsync(FilterUsersViewModel model, CancellationToken cancellationToken = default)
         {
-            try
+            var usersQuery = _userManager.Users
+                .AsNoTracking()
+                .Include(x => x.UserProfile)
+                .AsQueryable();
+
+            // Search
+            if (!string.IsNullOrWhiteSpace(model.Search))
             {
-                var usersQuery = _userManager.Users
-                    .AsNoTracking()
-                    .Include(x => x.UserProfile)
-                    .AsQueryable();
+                model.Search = model.Search.Trim();
 
-                // Search
+                usersQuery = usersQuery.Where(x =>
+                    (x.UserName != null &&
+                     x.UserName.Contains(model.Search)) ||
 
-                if (!string.IsNullOrWhiteSpace(model.Search))
-                {
-                    model.Search = model.Search.Trim();
+                    (x.Email != null &&
+                     x.Email.Contains(model.Search)) ||
 
-                    usersQuery = usersQuery.Where(x =>
-                        (x.UserName != null &&
-                         x.UserName.Contains(model.Search)) ||
+                    (x.UserProfile != null &&
+                     x.UserProfile.Name.Contains(model.Search)) ||
 
-                        (x.Email != null &&
-                         x.Email.Contains(model.Search)) ||
-
-                        (x.UserProfile != null &&
-                         x.UserProfile.Name.Contains(model.Search)) ||
-
-                        (x.UserProfile != null &&
-                         x.UserProfile.Family.Contains(model.Search))
-                    );
-                }
-
-                // Order
-
-                usersQuery = usersQuery
-                    .OrderByDescending(x => x.Id);
-
-                // Pagination
-
-                var paging = new BasePaging<ApplicationUser>
-                {
-                    PageId = model.PageId,
-                    TakeEntity = model.TakeEntity
-                };
-
-                await paging.Paging(usersQuery);
-
-
-                var result = new List<object>();
-
-                foreach (var user in paging.Entities)
-                {
-                    var roles = await _userManager.GetRolesAsync(user);
-
-                    result.Add(new
-                    {
-                        user.Id,
-                        user.UserName,
-                        user.Email,
-
-                        Name = user.UserProfile?.Name,
-                        Family = user.UserProfile?.Family,
-
-                        ProfileImage =
-                            user.UserProfile?.ProfileImage,
-
-                        Roles = roles
-                    });
-                }
-
-
-
-
-                return Result.Success(
-                    message: "لیست کاربران با موفقیت لود شد.",
-                    data: new
-                    {
-                        Users = result,
-
-                        Paging = paging.GetCurrentPaging()
-                    });
+                    (x.UserProfile != null &&
+                     x.UserProfile.Family.Contains(model.Search))
+                );
             }
-            catch (Exception ex)
+
+            // Order
+            usersQuery = usersQuery
+                .OrderByDescending(x => x.Id);
+
+            // Pagination
+            var paging = new BasePaging<ApplicationUser>
             {
-                _logger.LogError(
-                    ex,
-                    "خطا در دریافت کاربران.");
+                PageId = model.PageId,
+                TakeEntity = model.TakeEntity
+            };
 
-                return Result.Failure(
-                    message: ErrorMessages.UnknownError);
-            }
-        }
+            await paging.Paging(usersQuery);
 
- 
-
-        Task<ApplicationUser?> IUserRepository.GetUsersAsync(FilterUsersViewModel model)
-        {
-            throw new NotImplementedException();
+            return paging;
         }
 
         #endregion

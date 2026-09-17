@@ -7,7 +7,7 @@ using TaskFlow.Application.Utilities.ResultResponse;
 using TaskFlow.Domain.ErrorMessages;
 using TaskFlow.Domain.IRepository.User;
 
-namespace TaskFlow.Application.Services.CQRS.Query.User
+namespace TaskFlow.Application.Services.CQRS.Query.User.GetUser
 {
     public class GetUserQueryHandler
     {

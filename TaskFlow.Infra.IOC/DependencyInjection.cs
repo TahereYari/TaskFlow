@@ -10,11 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskFlow.Application.Common;
-using TaskFlow.Application.Services.CQRS.Query.User;
+using TaskFlow.Application.Services.CQRS.Query.User.GetUser;
+using TaskFlow.Application.Services.CQRS.Query.User.GetUsers;
 using TaskFlow.Application.Services.Implemantation.Account;
-using TaskFlow.Application.Services.Implemantation.User;
 using TaskFlow.Application.Services.Interfaces.Account;
-using TaskFlow.Application.Services.Interfaces.User;
 using TaskFlow.Application.Utilities.ResultResponse;
 using TaskFlow.Domain.ErrorMessages;
 using TaskFlow.Domain.IRepository.Account;
@@ -137,13 +136,14 @@ namespace TaskFlow.Infra.IOC
 
             #region Service
               services.AddScoped<IAccountService, AccountService>();
-              services.AddScoped<IUserService, UserService>();
+  
 
             #endregion
 
             #region Handler
           
             services.AddScoped<GetUserQueryHandler>();
+            services.AddScoped<GetUsersQueryHandler>();
 
             #endregion
 
