@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using TaskFlow.Application.Services.Interfaces.Account;
+using TaskFlow.Application.Services.Interfaces.User;
 using TaskFlow.Domain.ErrorMessages;
-using TaskFlow.Domain.ResultResponse;
 using TaskFlow.Domain.ViewModels.Accounts;
 using TaskFlow.Domain.ViewModels.RefreshToken;
 
@@ -56,10 +56,14 @@ namespace TaskFlow.Api.Controllers
             /// <returns></returns>
             [HttpPost("Login")]
             [AllowAnonymous]
-            public async Task<IActionResult> Login(LoginModel model)
+            public async Task<IActionResult> Login(LoginModel model, CancellationToken cancellationToken)
             {
-                var login = await _accountService.Login(model);
-                return Ok(login);
+                var result = await _accountService.Login( model,cancellationToken);
+
+                if (!result.IsSuccess)
+                    return Unauthorized(result);
+
+                return Ok(result);
             }
         #endregion
 
@@ -79,20 +83,6 @@ namespace TaskFlow.Api.Controllers
         }
         #endregion
        
-        
-        #region لیست کاربران
-        /// <summary>
-        /// لیست کاربران
-        /// </summary>
-        /// <param name="search"></param>
-        /// <returns></returns>
-        [HttpGet("GetUsersAsync")]
-            public async Task<IActionResult> GetUsersAsync([FromQuery]FilterUsersViewModel model)
-            {
-                var users = await _accountService.GetUsersAsync(model);
-                return Ok(users);
-            }
 
-        #endregion
     }
 }

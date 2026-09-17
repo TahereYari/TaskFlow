@@ -10,14 +10,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskFlow.Application.Common;
+using TaskFlow.Application.Services.CQRS.Query.User;
 using TaskFlow.Application.Services.Implemantation.Account;
+using TaskFlow.Application.Services.Implemantation.User;
 using TaskFlow.Application.Services.Interfaces.Account;
+using TaskFlow.Application.Services.Interfaces.User;
+using TaskFlow.Application.Utilities.ResultResponse;
 using TaskFlow.Domain.ErrorMessages;
-using TaskFlow.Domain.IRepository;
+using TaskFlow.Domain.IRepository.Account;
+using TaskFlow.Domain.IRepository.User;
 using TaskFlow.Domain.Models.Users;
-using TaskFlow.Domain.ResultResponse;
 using TaskFlow.Infra.Data.Context;
 using TaskFlow.Infra.Data.Repositories.Account;
+using TaskFlow.Infra.Data.Repositories.User;
 
 namespace TaskFlow.Infra.IOC
 {
@@ -126,11 +131,19 @@ namespace TaskFlow.Infra.IOC
 
             #region Repository
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             #endregion
 
             #region Service
               services.AddScoped<IAccountService, AccountService>();
+              services.AddScoped<IUserService, UserService>();
+
+            #endregion
+
+            #region Handler
+          
+            services.AddScoped<GetUserQueryHandler>();
 
             #endregion
 

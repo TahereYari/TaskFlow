@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TaskFlow.Domain.ResultResponse
+namespace TaskFlow.Application.Utilities.ResultResponse
 {
     public class Result
     {
