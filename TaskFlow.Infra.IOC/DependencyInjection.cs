@@ -10,6 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskFlow.Application.Common;
+using TaskFlow.Application.Services.CQRS.Commands.User.CreateUser;
+using TaskFlow.Application.Services.CQRS.Commands.User.Profile;
+using TaskFlow.Application.Services.CQRS.Commands.User.ToggleUserStatus;
 using TaskFlow.Application.Services.CQRS.Query.User.GetUser;
 using TaskFlow.Application.Services.CQRS.Query.User.GetUsers;
 using TaskFlow.Application.Services.Implemantation.Account;
@@ -144,6 +147,9 @@ namespace TaskFlow.Infra.IOC
           
             services.AddScoped<GetUserQueryHandler>();
             services.AddScoped<GetUsersQueryHandler>();
+            services.AddScoped<SaveUserCommandHandler>();
+            services.AddScoped<UpdateMyProfileCommandHandler>();
+            services.AddScoped<ToggleUserStatusCommandHandler>();
 
             #endregion
 

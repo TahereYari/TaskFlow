@@ -40,16 +40,21 @@ namespace TaskFlow.Infra.Data.Repositories.User
         #endregion
 
 
-        #region GetUserAsync
-            public async Task<ApplicationUser?> GetUserAsync(Guid id)
+        #region نمایش کاربر
+       
+            public async Task<ApplicationUser?> GetUserAsync(Guid id, CancellationToken cancellationToken)
             {
-                return await _context.Users.FindAsync(id);
+                return await _context.Users
+                                .Include(u => u.UserProfile)
+                                .FirstOrDefaultAsync(
+                                    u => u.Id == id,
+                                    cancellationToken); 
             }
 
         #endregion
 
 
-        #region GetUsersAsync
+        #region لیست کاربران
           public async Task<BasePaging<ApplicationUser>> GetUsersAsync(FilterUsersViewModel model, CancellationToken cancellationToken = default)
         {
             var usersQuery = _userManager.Users
@@ -94,5 +99,74 @@ namespace TaskFlow.Infra.Data.Repositories.User
         }
 
         #endregion
+
+
+        #region افزودن کاربر جدید
+        public async Task AddUserProfileAsync(UserProfile profile, CancellationToken cancellationToken = default)
+        {
+            await _context.UserProfiles.AddAsync( profile,cancellationToken);
+        }
+        #endregion
+
+        #region SaveChangesAsync
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        #endregion
+
+
+
+        #region قعال/ غیر فعال کردن کاربر
+        public Task ToggleActiveUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region ویرایش پروفایل کاربر
+
+
+        //public Task UpdateUserProfile()
+        //{
+        //    throw new NotImplementedException();
+        //}
+        #endregion
+
+
+        #region اطلاعات پروفایل کاربر
+        public async Task<UserProfile?> GetUserProfileAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _context.UserProfiles
+                        .FirstOrDefaultAsync(x => x.UserId == id,cancellationToken);
+        }
+
+        #endregion
+
+        #region BeginTransactionAsync
+        public async Task BeginTransactionAsync()
+        {
+            await _context.Database.BeginTransactionAsync();
+        }
+        #endregion
+
+        #region CommitTransactionAsync
+        public async Task CommitTransactionAsync()
+        {
+            await _context.Database.CommitTransactionAsync();
+        }
+        #endregion
+
+        #region RollbackTransactionAsync
+        public async Task RollbackTransactionAsync()
+        {
+            await _context.Database.RollbackTransactionAsync();
+        }
+
+      
+        #endregion
+
+
     }
 }

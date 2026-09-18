@@ -47,7 +47,8 @@ namespace TaskFlow.Application.Services.Implemantation.Account
         }
         #endregion
       
-        #region Login
+
+        #region ورود
         public async Task<Result> Login(LoginModel model, CancellationToken cancellationToken = default)
         {
             try
@@ -87,6 +88,7 @@ namespace TaskFlow.Application.Services.Implemantation.Account
             }
         }
         #endregion
+
 
         #region RefreshToken
         public async Task<Result> RefreshToken(RefreshTokenModel model)
@@ -146,7 +148,7 @@ namespace TaskFlow.Application.Services.Implemantation.Account
                     ExpiresAt = DateTime.UtcNow.AddDays(30)
                 };
 
-               await _accountRepository.AddRefreshToken(newRefreshToken);
+               await _accountRepository.AddRefreshTokenAsync(newRefreshToken);
 
 
                 return Result.Success(
@@ -169,13 +171,14 @@ namespace TaskFlow.Application.Services.Implemantation.Account
         #endregion
 
 
-        #region RegisterAsync
+        #region ثبت نام
         public async Task<Result> RegisterAsync(RegisterModel model)
         {
-             await _accountRepository.BeginTransactionAsync();
+           
 
             try
             {
+                await _accountRepository.BeginTransactionAsync();
                 //  اعتبار سنجی
                 var validationErrors =
                     await ValidateUserFieldsAsync(

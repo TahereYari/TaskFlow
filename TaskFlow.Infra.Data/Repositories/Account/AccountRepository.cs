@@ -46,36 +46,27 @@ namespace TaskFlow.Infra.Data.Repositories.Account
 
         #endregion
 
-        
-        #region AddRefreshTokenAsync
-            public async Task AddRefreshTokenAsync(RefreshToken refreshToken, CancellationToken cancellationToken = default)
+
+        #region افزودن RefreshToken
+        public async Task AddRefreshTokenAsync(RefreshToken refreshToken, CancellationToken cancellationToken = default)
             {
                 await _context.RefreshTokens.AddAsync(refreshToken,cancellationToken);
-
-                await _context.SaveChangesAsync(cancellationToken);
             }
-       #endregion
+        #endregion
 
 
-        #region FindRefreshToken
+        #region جستجو RefreshToken
         public async Task<RefreshToken> FindRefreshToken(RefreshTokenModel model)
         {
               // Find refresh token
                return await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == model.RefreshToken);
         }
         #endregion
-     
-        
-        #region AddRefreshToken
-        public async Task AddRefreshToken(RefreshToken model)
-        {
-            // پیدا کردن refresh token
-            _context.RefreshTokens.Add(model);
-        }
-        #endregion
 
 
-        #region AddUserProfileAsync
+
+
+        #region افزودن UserProfile
         public async Task AddUserProfileAsync(UserProfile profile)
         {
             await _context.UserProfiles.AddAsync(profile);
@@ -83,11 +74,29 @@ namespace TaskFlow.Infra.Data.Repositories.Account
 
         #endregion
 
+        #region RevokeUserRefreshTokensAsync
+        public async Task RevokeUserRefreshTokensAsync(Guid userId,CancellationToken cancellationToken = default)
+        {
+            var refreshTokens = await _context.RefreshTokens
+                .Where(x =>
+                    x.UserId == userId &&
+                    x.RevokedAt == null)
+                .ToListAsync(cancellationToken);
+
+            foreach (var refreshToken in refreshTokens)
+            {
+                refreshToken.RevokedAt = DateTime.UtcNow;
+            }
+
+          await SaveChangesAsync(cancellationToken);
+        }
+
+        #endregion
 
         #region SaveChangesAsync
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

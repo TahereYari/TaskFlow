@@ -12,12 +12,12 @@ namespace TaskFlow.Domain.IRepository.Account
   
 
         Task<RefreshToken> FindRefreshToken(RefreshTokenModel model);
-        Task AddRefreshToken(RefreshToken model);
+
         Task AddRefreshTokenAsync(RefreshToken refreshToken, CancellationToken cancellationToken = default);
 
         Task AddUserProfileAsync(UserProfile profile);
-
-        Task SaveChangesAsync();
+        Task RevokeUserRefreshTokensAsync(Guid userId, CancellationToken cancellationToken = default);
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
         Task BeginTransactionAsync();
 
         Task CommitTransactionAsync();
