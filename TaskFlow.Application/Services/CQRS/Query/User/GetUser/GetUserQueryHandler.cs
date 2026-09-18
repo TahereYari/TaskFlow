@@ -1,11 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using TaskFlow.Application.Utilities.ResultResponse;
 using TaskFlow.Domain.ErrorMessages;
 using TaskFlow.Domain.IRepository.User;
+using TaskFlow.Domain.Models.Users;
 
 namespace TaskFlow.Application.Services.CQRS.Query.User.GetUser
 {
@@ -13,11 +16,15 @@ namespace TaskFlow.Application.Services.CQRS.Query.User.GetUser
     {
         private readonly IUserRepository _userRepository;
         private readonly ILogger<GetUserQueryHandler> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GetUserQueryHandler(IUserRepository userRepository, ILogger<GetUserQueryHandler> logger)
+        public GetUserQueryHandler(IUserRepository userRepository,
+                                   ILogger<GetUserQueryHandler> logger,
+                                   UserManager<ApplicationUser> userManager)
         {
             _userRepository = userRepository;
             _logger = logger;
+            _userManager = userManager;
         }
         #region GetAsync
         public async Task<Result> Handle(GetUserQuery query)
@@ -29,8 +36,24 @@ namespace TaskFlow.Application.Services.CQRS.Query.User.GetUser
                 {
                     return Result.Failure(message: "کاربر وجود ندارد.");
                 }
+                var roles = await _userManager.GetRolesAsync(user);
+                var result = new 
+                {
+                    user.Id,
+                        user.UserName,
+                        user.Email,
 
-                return Result.Success(message: " کاربر با موفقیت لود شد.", data: user);
+                        Name = user.UserProfile?.Name,
+                        user.IsActive,
+                        Family = user.UserProfile?.Family,
+
+                        ProfileImage =
+                            user.UserProfile?.ProfileImage,
+
+                        Roles = roles
+                };
+
+                return Result.Success(message: " کاربر با موفقیت لود شد.", data: result);
 
             }
             catch (Exception ex)

@@ -60,6 +60,7 @@ namespace TaskFlow.Application.Services.CQRS.Query.User.GetUsers
 
                         ProfileImage =
                             user.UserProfile?.ProfileImage,
+                            user.IsActive,
 
                         Roles = roles
                     });
